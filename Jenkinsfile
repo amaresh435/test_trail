@@ -11,11 +11,10 @@ pipeline{
         stage('UNIT testing'){
             steps{
                 script{  
-                    sshagent(['ansible_01']) {
-                        sh 'ssh -o StrictHostKeyChecking=no -l ansible@10.128.15.211'
-                        sh 'scp /var/lib/jenkins/workspace/* ansible@10.128.15.211:/home/ansible'
-                    }
-                }
+                    
+                sshagent (credentials: ['ansible_02']) {
+                    sh 'ssh -o StrictHostKeyChecking=no -l ansible@10.128.15.211'
+                  }
             }
         }
         stage('Integration testing'){
