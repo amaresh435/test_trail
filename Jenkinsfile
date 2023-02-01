@@ -12,7 +12,7 @@ pipeline{
             steps{
                 script{  
                     sshagent (credentials: ['deploy-dev']) {
-                    sh 'ssh -o StrictHostKeyChecking=no ansible@35.223.231.172'
+                    sh 'ssh -t -o StrictHostKeyChecking=no ansible@35.223.231.172'
                     sh 'scp /var/lib/jenkins/workspace/* ansible@35.223.231.172:/home/ubuntu'
                   }
                 }
