@@ -10,11 +10,11 @@ pipeline{
         }
         stage('UNIT testing'){
             steps{
-                script{  
-                    
-                sshagent (credentials: ['ansible_02']) {
-                    sh 'ssh -o StrictHostKeyChecking=no ansible@10.128.15.211'
-                  }
+                script{   
+                    sshagent (credentials: ['ansible_02']) {
+                        sh 'ssh -o StrictHostKeyChecking=no ansible@10.128.15.211'
+                      }
+                }
             }
         }
         stage('Integration testing'){
