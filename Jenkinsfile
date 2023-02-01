@@ -11,7 +11,7 @@ pipeline{
         stage('UNIT testing'){
             steps{
                 script{  
-                    sshagent (credentials: ['deploy-dev']) {
+                    sshagent (credentials: ['ansible_server']) {
                     sh 'ssh -t -o StrictHostKeyChecking=no ansible@35.223.231.172'
                     sh 'scp /var/lib/jenkins/workspace/* ansible@35.223.231.172:/home/ubuntu'
                   }
