@@ -12,7 +12,7 @@ pipeline{
             steps{
                 script{   
                     sshagent (['ansible_02']) {
-                        sh 'ssh -o -t StrictHostKeyChecking=no ubuntu@35.223.231.172'
+                        sh 'ssh -o StrictHostKeyChecking=no root@35.223.231.172'
                       }
                 }
             }
