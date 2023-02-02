@@ -11,7 +11,7 @@ pipeline{
         stage('UNIT testing'){
             steps{
                 script{   
-                    sshagent (['ansible2']) {
+                    sshagent (['ansible0001']) {
                         sh 'ssh -o StrictHostKeyChecking=no ansible@10.128.15.214'
                         sh 'echo "Hello World"'
                       }
