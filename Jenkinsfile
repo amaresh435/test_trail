@@ -12,7 +12,7 @@ pipeline{
             steps{
                 script{   
                     sshagent (['jenkins']) {
-                        sh 'ssh -o StrictHostKeyChecking=no jenkins@35.223.231.172'
+                        sh 'ssh -o StrictHostKeyChecking=no jenkins@10.128.15.212'
                         sh 'echo "Hello World"'
                       }
                 }
