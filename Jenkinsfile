@@ -3,13 +3,13 @@ pipeline {
     tools { 
         maven 'maven-3.8.6' 
     }
-    stages {
-        stage('Checkout git') {
-            steps {
-                git 'https://github.com/amaresh435/test_trail.git'			  
+        stages {
+            stage('Checkout git') {
+                steps {
+                   git branch: 'main', url: 'https://github.com/amaresh435/test_trail'
+                }
             }
-        }
-        
+
         stage ('Build & JUnit Test') {
             steps {
                 sh 'mvn install'
