@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Checkout git') {
             steps {
-                git ''https://github.com/logicopslab/test_trail.git'			  
+                git 'https://github.com/logicopslab/test_trail.git'			  
             }
         }
         
