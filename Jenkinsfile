@@ -13,7 +13,7 @@ pipeline{
                 script{   
                     sshagent (['ansible0001']) {
                         sh 'ssh -T StrictHostKeyChecking=no ansible@10.128.15.214'
-                        sh 'echo "Hello World001"'
+                        sh 'echo "Hello World0001"'
                       }
                 }
             }
