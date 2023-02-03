@@ -12,7 +12,8 @@ pipeline {
         
         stage ('Build & JUnit Test') {
             steps {
-                sh 'mvn install' 
+                sh 'mvn install'
+                sh 'echo "Hello-world"'
             }
             post {
                success {
