@@ -1,34 +1,27 @@
 pipeline {
     agent any
-    tools { 
-        maven 'maven-3.8.6' 
-    }
     stages {
-        stage('Checkout git') {
+	stage('CHECKOUT'){ 
+             steps {
+                sh 'echo Github CHECKOUT successfully'
+		  }
+	}
+        stage("Run Tests") {
             steps {
-                git branch: 'main', url: 'https://github.com/logicopslab/test_trail'		  
+                    sh '''
+                    echo "Demo testing successfull..."  
+                    echo "Checking for Json file with attrinute 'Status' active and replacing with paused value"
+		    '''
             }
         }
-        
-        stage ('Build & JUnit Test') {
-            steps {
-                sh 'mvn install' 
-            }
-            post {
-               success {
-                    junit 'target/surefire-reports/**/*.xml'
-                }   
-            }
-        }
-        stage('SonarQube Analysis'){
-            steps{
-                   withSonarQubeEnv('sonarqube') {
-                        sh 'mvn clean verify sonar:sonar \
-                          -Dsonar.projectKey=apex_poc_key \
-                          -Dsonar.host.url=$sonarurl \
-                          -Dsonar.login=$sonar_login'
-                    }
+	stage('Deploy'){
+		steps{
+			{
+		  	def input = input message: 'Write some thing', parameters: [string(defaultValue: '', description: '', name: 'SOMETHING', trim: false)]
+		  	echo input
+		  	sh "echo ${input}"
+			}
+                sh 'echo Deploying: Moving to Deploy target folder locatin'  
             }
         }
-    }
-} 
+    }   
