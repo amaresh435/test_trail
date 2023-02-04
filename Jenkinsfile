@@ -1,52 +1,34 @@
-def getDockerTag() {
-    def tag = sh script: 'git rev-parse HEAD', returnStdout: true 
-    return tag
+pipeline {
+    agent any
+    tools { 
+        maven 'maven-3.8.6' 
     }
-pipeline{
-    agent {
-        docker {
-            image 'maven'
-            args '-v $HOME/.m2:/root/.m2'
+    stages {
+        stage('Checkout git') {
+            steps {
+                git 'https://github.com/logicopslab/DevSecOps_Project.git'			  
+            }
         }
-    }
-    environment {
-        Docker_tag = getDockerTag()
-    }
-    
-    stages{
-
-        stage('Quality Gate Status Check'){
+        
+        stage ('Build & JUnit Test') {
+            steps {
+                sh 'mvn install' 
+            }
+            post {
+               success {
+                    junit 'target/surefire-reports/**/*.xml'
+                }   
+            }
+        }
+        stage('SonarQube Analysis'){
             steps{
-                script{
-                    withSonarQubeEnv(credentialsId: 'sonarqube'){ 
+                   withSonarQubeEnv('sonarqube') {
                         sh 'mvn clean verify sonar:sonar \
                           -Dsonar.projectKey=apex_poc_key \
                           -Dsonar.host.url=$sonarurl \
                           -Dsonar.login=$sonar_login'
                     }
-                    timeout(time: 1, unit: 'HOURS') {
-                        def qg = waitForQualityGate()
-                            if (qg.status != 'OK') {
-                                error "Pipeline aborted due to quality gate failure: ${qg.status}"
-                            }
-                    }
-                sh "mvn clean install"
-                }
-            }  
-        }	
-
-        stage('build'){
-            steps {
-                script{
-                    sh 'docker build . -t deekshithsn/devops-training:$Docker_tag'
-                    withCredentials([string(credentialsId: 'docker_password', variable: 'docker_password')]) {
-
-                    sh '''docker login -u deekshithsn -p $docker_password
-                        docker push deekshithsn/devops-training:$Docker_tag
-                    '''
-                    }
-                }
             }
         }
-    }	       	     	         
-}
+    }
+} 
