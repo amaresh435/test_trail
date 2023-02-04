@@ -19,7 +19,11 @@ pipeline{
             steps{
                 script{
                     withSonarQubeEnv(credentialsId: 'sonarqube'){ 
-                        sh "mvn sonar:sonar"
+                        #sh "mvn sonar:sonar"
+                        sh 'mvn clean verify sonar:sonar \
+                          -Dsonar.projectKey=apex_poc_key \
+                          -Dsonar.host.url=$sonarurl \
+                          -Dsonar.login=$sonar_login'
                     }
                     timeout(time: 1, unit: 'HOURS') {
                         def qg = waitForQualityGate()
