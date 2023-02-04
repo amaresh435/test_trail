@@ -19,6 +19,7 @@ pipeline{
             steps{
                 script{
                     withSonarQubeEnv('sonarqube') { 
+                        sh "ls -lart "
                         sh "mvn sonar:sonar"
                     }
                     timeout(time: 1, unit: 'HOURS') {
