@@ -11,16 +11,10 @@ pipeline {
                     args '-v $HOME/.m2:/root/.m2'
                 }
             }
-                steps {
-                    sh 'mvn install' 
-                }
-                post {
-                   success {
-                        junit 'target/surefire-reports/**/*.xml'
-                    }   
-                }
+
+            steps{
                 script{
-                   withSonarQubeEnv(credentialsId: 'sonarqube') {
+                   withSonarQubeEnv(credentialsId: 'sonar-password') {
                        sh 'chmod +x gradlew'
                        sh './gradlew sonarqube'
                     }
@@ -31,5 +25,9 @@ pipeline {
                         }
                     }
                 }
+            }
+
         }
+    }
+
 }
