@@ -19,7 +19,6 @@ pipeline{
             steps{
                 script{
                     withSonarQubeEnv(credentialsId: 'sonarqube'){ 
-                        #sh "mvn sonar:sonar"
                         sh 'mvn clean verify sonar:sonar \
                           -Dsonar.projectKey=apex_poc_key \
                           -Dsonar.host.url=$sonarurl \
