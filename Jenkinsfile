@@ -1,5 +1,8 @@
 pipeline {
-  agent any 
+  agent any
+  tools { 
+        maven 'maven-3.8.6' 
+    }
     stages{
         stage("sonarqube static code check"){
             agent{
@@ -8,8 +11,15 @@ pipeline {
                     args '-v $HOME/.m2:/root/.m2'
                 }
             }
-
-            steps{
+                steps {
+                    sh 'mvn install' 
+                }
+                post {
+                   success {
+                        junit 'target/surefire-reports/**/*.xml'
+                    }   
+                }
+                steps{
                 script{
                    withSonarQubeEnv(credentialsId: 'sonarqube') {
                        sh 'chmod +x gradlew'
