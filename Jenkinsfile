@@ -19,7 +19,6 @@ pipeline {
                         junit 'target/surefire-reports/**/*.xml'
                     }   
                 }
-                steps{
                 script{
                    withSonarQubeEnv(credentialsId: 'sonarqube') {
                        sh 'chmod +x gradlew'
@@ -32,8 +31,6 @@ pipeline {
                         }
                     }
                 }
-            }
-
         }
     }
 
