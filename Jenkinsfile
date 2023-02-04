@@ -24,8 +24,6 @@ pipeline{
                           -Dsonar.projectKey=apex_poc_key \
                           -Dsonar.host.url=$sonarurl \
                           -Dsonar.login=$sonar_login'
-                        sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar'
-                        sh "mvn sonar:sonar"
                     }
                     timeout(time: 1, unit: 'HOURS') {
                         def qg = waitForQualityGate()
