@@ -1,74 +1,79 @@
-pipeline {
-    agent any
-    tools { 
-        maven 'maven-3.8.6' 
-    }
-    stages {
-        stage('Checkout git') {
-            steps {
-               git branch: 'sonar', url: 'https://github.com/logicopslab/java-web-app'
-            }
+currentBuild.displayName = "Final_Demo # "+currentBuild.number
+
+   def getDockerTag(){
+        def tag = sh script: 'git rev-parse HEAD', returnStdout: true
+        return tag
         }
         
-        stage ('Build & JUnit Test') {
-            steps {
-                sh 'mvn install' 
-            }
-            post {
-               success {
-                    junit 'target/surefire-reports/**/*.xml'
-                }   
-            }
+
+pipeline{
+        agent any  
+        environment{
+	    Docker_tag = getDockerTag()
         }
-          
-        stage('SonarQube Analysis'){
-            steps{
-                   withSonarQubeEnv(installationName: 'sonarqube') {
-                        sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar'
-                    }
-            }
-        }
-        stage('Building Docker Image'){
-            steps{
-                sh '''
-                sudo docker build -t logicopslab/devsecops-demo:$BUILD_NUMBER .
-                sudo docker images
-                '''
-            }
-        }
-        stage('Image Scanning Trivy'){
-            steps{
-               sh 'sudo trivy image logicopslab/devsecops-demo:$BUILD_NUMBER > $WORKSPACE/trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt'   
-            }
-        }
-        stage('Pushing Docker Image into Docker Hub'){
-            steps{
-                withCredentials([vaultString(credentialsId: 'vault-dockerhub-password', variable: 'DOCKERHUB_PASSWORD')]) {
-                sh '''
-                sudo docker login -u logicosplab -p $DOCKERHUB_PASSWORD
-                sudo docker push logicopslab/devsecops-demo:$BUILD_NUMBER
-                '''
-               }
-            }
-        }        
         
-        stage ('Uploading Reports to Cloud Storage'){
-            steps{
-                   withCredentials([vaultFile(credentialsId: 'cloud-storage-access', variable: 'CLOUD_CREDS')]) {
-                   sh '''
-                   gcloud version
-                   gcloud auth activate-service-account --key-file="$CLOUD_CREDS"
-                   gsutil cp -r $WORKSPACE/trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt gs://devsecops-reports
-                   gsutil ls gs://devsecops-reports
-                   '''
+        stages{
+
+
+              stage('Quality Gate Statuc Check'){
+
+               agent {
+                docker {
+                image 'maven'
+                args '-v $HOME/.m2:/root/.m2'
                 }
             }
-        }
-        stage('Cleaning up DockerImage'){
-            steps{
-                sh 'sudo docker rmi logicopslab/devsecops-demo:$BUILD_NUMBER'
-            }
-        }
-    }
-  }
-        
+                  steps{
+                      script{
+                      withSonarQubeEnv('sonarserver') { 
+                      sh "mvn sonar:sonar"
+                       }
+                      timeout(time: 1, unit: 'HOURS') {
+                      def qg = waitForQualityGate()
+                      if (qg.status != 'OK') {
+                           error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                      }
+                    }
+		    sh "mvn clean install"
+                  }
+                }  
+              }
+
+
+
+              stage('build')
+                {
+              steps{
+                  script{
+		 sh 'cp -r ../devops-training@2/target .'
+                   sh 'docker build . -t deekshithsn/devops-training:$Docker_tag'
+		   withCredentials([string(credentialsId: 'docker_password', variable: 'docker_password')]) {
+				    
+				  sh 'docker login -u deekshithsn -p $docker_password'
+				  sh 'docker push deekshithsn/devops-training:$Docker_tag'
+			}
+                       }
+                    }
+                 }
+		 
+		stage('ansible playbook'){
+			steps{
+			 	script{
+				    sh '''final_tag=$(echo $Docker_tag | tr -d ' ')
+				     echo ${final_tag}test
+				     sed -i "s/docker_tag/$final_tag/g"  deployment.yaml
+				     '''
+				    ansiblePlaybook become: true, installation: 'ansible', inventory: 'hosts', playbook: 'ansible.yaml'
+				}
+			}
+		}
+		
+	
+		
+               }
+	       
+	       
+	       
+	      
+    
+}
