@@ -18,7 +18,7 @@ pipeline{
         stage('Quality Gate Status Check'){
             steps{
                 script{
-                    withSonarQubeEnv('sonarqube_token') { 
+                    withSonarQubeEnv(credentialsId: 'sonarqube'){ 
                         sh "mvn sonar:sonar"
                     }
                     timeout(time: 1, unit: 'HOURS') {
