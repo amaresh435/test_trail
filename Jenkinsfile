@@ -51,7 +51,7 @@ pipeline{
       steps{
         sh '''
         docker build . -t amarg435/poc_feb2023:$Docker_tag
-        docker images
+        whoami
         '''
       }
     }
