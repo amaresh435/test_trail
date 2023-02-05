@@ -4,7 +4,7 @@ def getDockerTag(){
   }
         
 pipeline{
-  agent any  
+  agent any
   environment{
     Docker_tag = getDockerTag()
   }
@@ -12,7 +12,8 @@ pipeline{
   stages{
     stage('Quality Gate Statuc Check'){
       agent {
-        docker { image 'maven:3-alpine' }
+        docker { 
+          image 'maven:3-alpine' 
           args '-v $HOME/.m2:/root/.m2'
         }
         steps{
