@@ -4,23 +4,21 @@ def getDockerTag(){
   }
         
 pipeline{
-  agent {
-        docker { 
-          image 'maven' 
-          args '-v $HOME/.m2:/root/.m2'
-        }
-      }
+  agent any
   environment{
     Docker_tag = getDockerTag()
   }
 
   stages{
     stage('Quality Gate Statuc Check'){
-      
+      agent {
+                docker {
+                image 'maven'
+                args '-v $HOME/.m2:/root/.m2'
+                }
         steps{
           script{
             withSonarQubeEnv(credentialsId: 'sonar_token_GCP_VM') {
-              sh "mvn clean"
               sh "mvn sonar:sonar"
               }
               timeout(time: 1, unit: 'HOURS') {
