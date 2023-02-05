@@ -16,6 +16,7 @@ pipeline{
                 image 'maven'
                 args '-v $HOME/.m2:/root/.m2'
                 }
+      }
         steps{
           script{
             withSonarQubeEnv(credentialsId: 'sonar_token_GCP_VM') {
@@ -32,6 +33,9 @@ pipeline{
         }        
     }
     stage('build'){
+      agent {
+                docker { image 'maven'
+                }
       steps {
           script{
               sh 'docker build . -t amarg435/poc_feb2023:$Docker_tag'
