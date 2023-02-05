@@ -21,6 +21,8 @@ pipeline{
       steps{
           script{
             withSonarQubeEnv('vm_sonarqube_server') { 
+              sh "$HOME"
+              sh "$PWD"
               sh "mvn clean"
               sh "mvn sonar:sonar"
               }
