@@ -18,7 +18,7 @@ pipeline{
         stage('Quality Gate Status Check'){
             steps{
                 script{
-                    withSonarQubeEnv('sonarqube') { 
+                    withSonarQubeEnv(credentialsId: 'vm_sonarqube') { 
                         sh "ls -lart"
                         sh 'mvn clean verify sonar:sonar \
                           -Dsonar.projectKey=apex_poc_key \
@@ -40,10 +40,9 @@ pipeline{
             steps {
                 script{
                     sh 'docker build . -t deekshithsn/devops-training:$Docker_tag'
-                    withCredentials([string(credentialsId: 'docker_password', variable: 'docker_password')]) {
-
-                    sh '''docker login -u deekshithsn -p $docker_password
-                        docker push deekshithsn/devops-training:$Docker_tag
+                    withCredentials([string(credentialsId: 'amarg435', variable: 'docker_hub')]) {
+                    sh '''docker login -u amarg435 -p $docker_hub
+                        docker push amarg435/poc_feb2023:$Docker_tag
                     '''
                     }
                 }
