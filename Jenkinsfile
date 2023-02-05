@@ -18,7 +18,7 @@ pipeline{
         stage('Quality Gate Status Check'){
             steps{
                 script{
-                    withSonarQubeEnv(credentialsId: 'vm_sonarqube') { 
+                    withSonarQubeEnv(credentialsId: 'vm_sonarqube_server') { 
                         sh "ls -lart"
                         sh "mvn sonar:sonar"
                         
