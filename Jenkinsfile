@@ -50,6 +50,8 @@ pipeline{
     stage('Building Docker Image'){
       steps{
         sh '''
+          whoami
+          echo $WORKSPACE
           docker build . -t amarg435/poc_feb2023:$Docker_tag
         '''
       }
@@ -57,8 +59,9 @@ pipeline{
     stage('Image Scanning Trivy'){
       steps{
         sh ''' 
-          mkdir -p $WORKSPACE/trivy-image-scan/
-          trivy image amarg435/poc_feb2023:$Docker_tag > $WORKSPACE/trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt
+          mkdir -p trivy-image-scan/
+          trivy image amarg435/poc_feb2023:$Docker_tag > trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt
+          ls -lart trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt
           cat $WORKSPACE/trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt
         '''
       }
