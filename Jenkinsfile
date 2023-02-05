@@ -62,7 +62,7 @@ pipeline{
           mkdir -p trivy-image-scan/
           trivy image amarg435/poc_feb2023:$Docker_tag > trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt
           ls -lart trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt
-          cat $WORKSPACE/trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt
+          cat trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt
         '''
       }
     }
@@ -74,6 +74,13 @@ pipeline{
           docker push amarg435/poc_feb2023:$Docker_tag
         '''
          }
+      }
+    }
+    stage('Removing Docker Image'){
+      steps{
+        sh '''
+          docker rmi amarg435/poc_feb2023:$Docker_tag
+        '''
       }
     }
   }
