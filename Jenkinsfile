@@ -12,10 +12,10 @@ pipeline{
   stages{
     stage('Sonarqube Quality Gate Status Check'){
       agent {
-                docker {
-                image 'maven:3.8-openjdk-18-slim'
-                args '-v $HOME/.m2:/root/.m2'
-                }
+        docker {
+        image 'maven:3.8-openjdk-18-slim'
+        args '-v $HOME/.m2:/root/.m2'
+        }
       }
         steps{
           script{
@@ -44,7 +44,8 @@ pipeline{
             withSonarQubeEnv(credentialsId: 'sonar_token_GCP_VM') {
               sh "mvn clean install"
           }
-        }        
+        }
+      }        
     }
     stage('Docker Build'){
       steps {
