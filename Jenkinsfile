@@ -57,12 +57,15 @@ pipeline{
       }
     }
     stage('Image Scanning Trivy'){
+      agent {
+        docker { image 'alpine:3.17' }
+      }
       steps{
         sh ''' 
           mkdir -p trivy-image-scan/
-          #trivy image amarg435/poc_feb2023:$Docker_tag > trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt
-          #ls -lart trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt
-          #cat trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt
+          trivy image amarg435/poc_feb2023:$Docker_tag > trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt
+          ls -lart trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt
+          cat trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt
         '''
       }
     }
