@@ -31,7 +31,8 @@ pipeline{
                 sh "mvn clean install"
             }
           }       
-    }  
+      }  
+    }
     stage('build'){
       steps {
           script{
