@@ -58,7 +58,9 @@ pipeline{
     }
     stage('Image Scanning Trivy'){
       agent {
-        docker { image 'alpine:3.17' }
+        docker { 
+          image 'alpine:3.17' 
+        }
       }
       steps{
         sh ''' 
