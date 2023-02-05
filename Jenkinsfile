@@ -75,5 +75,13 @@ pipeline{
          }
       }
     }
+    stage('Pushing Docker Image into Docker Hub'){
+      steps{
+        sh '''
+          docker login -u amarg435 -p $docker_hub
+          docker rmi amarg435/poc_feb2023:$Docker_tag
+        '''
+         }
+      }
   }
 }
