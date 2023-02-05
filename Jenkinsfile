@@ -37,7 +37,7 @@ pipeline{
       steps {
           script{
               sh 'cp -r ../devops-training@2/target .'
-              sh 'docker build . -t deekshithsn/devops-training:$Docker_tag'
+              sh 'docker build . -t amarg435/poc_feb2023:$Docker_tag'
               withCredentials([string(credentialsId: 'amarg435', variable: 'docker_hub')]) {
               sh '''docker login -u amarg435 -p $docker_hub
                   docker push amarg435/poc_feb2023:$Docker_tag
