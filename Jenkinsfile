@@ -38,9 +38,9 @@ pipeline{
           script{
               sh 'docker build . -t amarg435/poc_feb2023:$Docker_tag'
               withCredentials([string(credentialsId: 'amarg435', variable: 'docker_hub')]) {
-              sh '''docker login -u amarg435 -p $docker_hub
-                  docker push amarg435/poc_feb2023:$Docker_tag
-              '''
+              sh 'docker login -u amarg435 -p $docker_hub'
+              sh 'docker push amarg435/poc_feb2023:$Docker_tag'
+
               }
           }
       }
