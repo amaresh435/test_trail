@@ -50,8 +50,6 @@ pipeline{
     stage('Building Docker Image'){
       steps{
         sh '''
-          whoami
-          $WORKSPACE
           docker build . -t amarg435/poc_feb2023:$Docker_tag
         '''
       }
