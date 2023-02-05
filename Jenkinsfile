@@ -19,6 +19,8 @@ pipeline{
                 script{
                     withSonarQubeEnv(credentialsId: 'vm_sonarqube_server') { 
                         sh "ls -lart"
+                        sh "mvn clean"
+                        sh "cat Jenkinsfile"
                         sh "mvn sonar:sonar"
                         
                     }
