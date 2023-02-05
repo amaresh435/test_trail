@@ -65,9 +65,9 @@ pipeline{
       steps{
         sh ''' 
           mkdir -p trivy-image-scan/
-          trivy image amarg435/poc_feb2023:$Docker_tag > trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt
-          ls -lart trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt
-          cat trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt
+          #trivy image amarg435/poc_feb2023:$Docker_tag > trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt
+          #ls -lart trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt
+          #cat trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt
         '''
       }
     }
@@ -88,14 +88,26 @@ pipeline{
         '''
       }
     }
-    stage('Deploying application on k8s cluster') {
+   stage('Deploying application on k8s cluster') {
       steps {
-        echo "Deploying application on k8s cluster"
+         script{
+           withCredentials([kubeconfigFile(credentialsId: '	KUBECONFIG', variable: 'KUBECONFIG')]) {
+            dir('kubernetes/') {
+              sh ' step here ' 
+            }
+          }
+         }
       }
     }
-    stage('verifying app deployment') {
-      steps {
-        echo "Deploying application on k8s cluster"
+
+    stage('verifying app deployment'){
+      steps{
+        script{
+           withCredentials([kubeconfigFile(credentialsId: 'KUBECONFIG', variable: 'KUBECONFIG')]) {
+             sh 'sh ' step here ' '
+
+           }
+        }
       }
     }
   }
