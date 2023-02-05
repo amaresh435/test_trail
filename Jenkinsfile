@@ -33,9 +33,6 @@ pipeline{
         }        
     }
     stage('build'){
-      agent {
-                docker { image 'maven'
-                }
       steps {
           script{
               sh 'docker build . -t amarg435/poc_feb2023:$Docker_tag'
