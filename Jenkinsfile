@@ -50,22 +50,22 @@ pipeline{
     stage('Building Docker Image'){
       steps{
         sh '''
-        sudo docker build . -t amarg435/poc_feb2023:$Docker_tag
-        sudo docker images
+        docker build . -t amarg435/poc_feb2023:$Docker_tag
+        docker images
         '''
       }
     }
     stage('Image Scanning Trivy'){
       steps{
-         sh 'sudo trivy image amarg435/poc_feb2023:$Docker_tag > $WORKSPACE/trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt'   
+         sh 'trivy image amarg435/poc_feb2023:$Docker_tag > $WORKSPACE/trivy-image-scan/trivy-image-scan-$BUILD_NUMBER.txt'   
       }
     }
     stage('Pushing Docker Image into Docker Hub'){
       steps{
         withCredentials([string(credentialsId: 'amarg435', variable: 'docker_hub')]) {
         sh '''
-        sudo docker login -u amarg435 -p $docker_hub
-        sudo docker push amarg435/poc_feb2023:$Docker_tag
+          docker login -u amarg435 -p $docker_hub
+          docker push amarg435/poc_feb2023:$Docker_tag
         '''
          }
       }
