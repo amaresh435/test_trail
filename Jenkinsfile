@@ -18,8 +18,10 @@ pipeline{
         stage('Quality Gate Status Check'){
             steps{
                 script{
-                    withSonarQubeEnv(installationName: 'sonarqube') {
-                        sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar'
+                    withSonarQubeEnv(credentialsId: 'vm_sonarqube') { 
+                        sh "ls -lart"
+                        sh "mvn sonar:sonar"
+                        
                     }
                     timeout(time: 1, unit: 'HOURS') {
                         def qg = waitForQualityGate()
