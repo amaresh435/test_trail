@@ -84,6 +84,7 @@ pipeline{
     stage('Removing Docker Image'){
       steps{
         sh '''
+          echo "hello_world"
           docker rmi amarg435/poc_feb2023:$Docker_tag
         '''
       }
