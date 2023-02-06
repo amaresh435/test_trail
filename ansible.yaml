@@ -1,7 +1,5 @@
 - hosts: kmaster
   gather_facts: false
-  env:
-    ANSIBLE_HOST_KEY_CHECKING: false
   tasks:
   - name: copy deployment file to kubernetes master 
     copy:
