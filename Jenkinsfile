@@ -57,11 +57,6 @@ pipeline{
       }
     }
     stage('Image Scanning Trivy'){
-      agent {
-        docker { 
-          image 'aquasec/trivy' 
-        }
-      }
       steps{
         sh ''' 
           mkdir -p trivy-image-scan/
