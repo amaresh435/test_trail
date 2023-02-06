@@ -1,4 +1,5 @@
 - hosts: kmaster
+  gather_facts: false
   tasks:
   - name: copy deployment file to kubernetes master 
     copy:
