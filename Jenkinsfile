@@ -94,7 +94,6 @@ pipeline{
          script{
               sh ' echo "step here" ' 
             }
-         }
       }
     }
 
