@@ -95,7 +95,7 @@ pipeline{
     stage('verifying app deployment'){
       steps{
         script{
-             sh 'echo "step here" '
+             sh 'echo "step here   " '
            }
       }
     }
