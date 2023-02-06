@@ -91,9 +91,9 @@ pipeline{
    stage('Deploying application on k8s cluster') {
       steps {
          script{
-           withCredentials([kubeconfigFile(credentialsId: '	KUBECONFIG', variable: 'KUBECONFIG')]) {
+           withCredentials([kubeconfigFile(credentialsId: '	amarg435', variable: 'docker_hub')]) {
             dir('kubernetes/') {
-              sh ' step here ' 
+              sh ' echo "step here" ' 
             }
           }
          }
@@ -103,8 +103,8 @@ pipeline{
     stage('verifying app deployment'){
       steps{
         script{
-           withCredentials([kubeconfigFile(credentialsId: 'KUBECONFIG', variable: 'KUBECONFIG')]) {
-             sh 'sh ' step here ' '
+           withCredentials([kubeconfigFile(credentialsId: 'amarg435', variable: 'docker_hub')]) {
+             sh 'echo "step here" '
 
            }
         }
