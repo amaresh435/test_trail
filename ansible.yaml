@@ -1,5 +1,6 @@
 - hosts: kmaster
   gather_facts: false
+  remote_user: root
   tasks:
   - name: copy deployment file to kubernetes master 
     copy:
